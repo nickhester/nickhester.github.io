@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mangle It</title>
+</head>
+<body>
+	<script>
+		function handleClickSubmit() {
+			console.log("you clicked go");
+			const inputText = document.getElementById("input-text").value;
+
+			
+			let wordArray = inputText.split(' ');
+			let numWords = wordArray.length;
+
+			// remove chunk of size, as long as the size is smaller than the length of the sentence
+			let maxLengthMovableChunk = 3;
+			let numWordsInMovableChunk = Math.floor(Math.random() * (maxLengthMovableChunk >= numWords ? numWords - 1 : maxLengthMovableChunk)) + 1;
+
+			let randomIndexToTakeWord = Math.floor(Math.random() * numWords);
+			let randomIndexToPlaceWord = Math.floor(Math.random() * numWords) - numWordsInMovableChunk; // subtracting num words removed since the array will be shorter after removing them
+
+			// take N words out at random location
+			let wordsTaken = wordArray.splice(randomIndexToTakeWord, numWordsInMovableChunk);
+
+			// add those words back at random location, surrounded by commas
+			const newSentence = wordArray.slice(0, randomIndexToPlaceWord).join(' ') +
+				', ' +
+				wordsTaken.join(' ') +
+				', ' +
+				wordArray.slice(randomIndexToPlaceWord, wordArray.length).join(' ');
+
+			// append new
+			var newNode = document.createElement("h3");
+			newNode.textContent = newSentence;
+			var outputParent = document.getElementById("output-text-parent");
+			outputParent.appendChild(newNode);
+		}
+	</script>
+	<style>
+		body {
+			margin: 2em auto;
+			max-width: 50em;
+			font-family: Arial, Helvetica, sans-serif;
+			background-color: black;
+			color: white;
+		}
+	</style>
+
+	<h1>Enter a sentence and I'll mangle it for you.</h1>
+	<input id="input-text">
+	<button id="go-button" onclick="handleClickSubmit()">
+		Mangle
+	</button>
+	<div id="output-text-parent"></div>
+</body>
+</html>
